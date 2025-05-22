@@ -1,1 +1,13 @@
-
+body
+background-color: black; display. flex, justify-content: center;" align-items: center; height: 100vh; overflow: hidden;
+flower ( position: relative; widith: 100px height: 100px; animation: bloom 5s ease-in-out infinite;
+.petal
+position: absolute; width: 50px; height: 50px, border-radius: 50%; background-color: pink; opacity: 0; animation: fade 5s ease-in-out infinite:
+M
+@keyframes bloom 0% transform: trans|ateY(100vh);
+50 %
+transforn:translateY/0),
+100%仁 transform: scale(2);
+@keyframes bloom ( 0% transform: translateY(10vh);
+50% transform: translateY(0); ~ 100% transform: scale(2);
+@keyframes fade ( 0% ( opacity: 0; 50% opacity: 1; 100% opacity: 0; ))
