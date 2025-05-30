@@ -1,1 +1,722 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Album Kenangan Aesthetic</title>
+    <style>
+        /* GLOBAL STYLES */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Playfair Display', serif;
+            background-color: #f9f5f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #5a4a42;
+        }
 
+        /* PARTIKEL DEKORASI */
+        .particle {
+            position: fixed;
+            opacity: 0.6;
+            z-index: -1;
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        /* BOOK CONTAINER */
+        .book-container {
+            perspective: 2000px;
+            width: 95%;
+            max-width: 1000px;
+            margin: 2rem auto;
+            position: relative;
+        }
+
+        /* BOOK COVER */
+        .book-cover {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            background: url('https://www.transparenttextures.com/patterns/vintage-speckles.png');
+            background-color: #e8d9c5;
+            border-radius: 5px 15px 15px 5px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2),
+                        inset -15px 0 25px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transform-origin: left center;
+            transition: transform 1s ease-in-out;
+            z-index: 100;
+            border-left: 20px solid #d4c4a8;
+            overflow: hidden;
+        }
+
+        .book-cover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(232,217,197,0.3) 0%, rgba(212,196,168,0.3) 100%);
+        }
+
+        .book-cover h1 {
+            font-size: 3rem;
+            color: #5a4a42;
+            margin-bottom: 1rem;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .book-cover p {
+            font-size: 1.3rem;
+            color: #6d5c54;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
+            font-style: italic;
+        }
+
+        .open-btn {
+            background: #a38f78;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 2;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .open-btn:hover {
+            background: #8a7864;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        /* BOOK PAGES */
+        .book {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            transform-style: preserve-3d;
+            display: none;
+        }
+
+        .page {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            top: 0;
+            background: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+            background-color: #fffaf5;
+            padding: 2rem;
+            box-sizing: border-box;
+            overflow-y: auto;
+            transform-origin: left center;
+            transition: transform 1s ease-in-out;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.05);
+        }
+
+        .front {
+            left: 0;
+            z-index: 10;
+            border-right: 1px solid #e0d5c8;
+        }
+
+        .back {
+            left: 50%;
+            z-index: 9;
+            border-left: 1px solid #e0d5c8;
+        }
+
+        .page.flipped {
+            transform: rotateY(-180deg);
+            z-index: 20;
+        }
+
+        /* PAGE CONTENT */
+        .page-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #8a7864;
+            position: relative;
+        }
+
+        .page-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 2px;
+            background: #d4c4a8;
+            margin: 0.5rem auto;
+        }
+
+        /* GALLERY LAYOUT */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .photo-collage {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .photo-frame {
+            position: relative;
+            overflow: hidden;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            background: white;
+            border: 8px solid white;
+        }
+
+        .photo-frame:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            z-index: 5;
+        }
+
+        .photo-frame.large {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .photo-frame.portrait {
+            grid-row: span 2;
+        }
+
+        .photo-frame.landscape {
+            grid-column: span 2;
+        }
+
+        .album-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .photo-frame:hover .album-photo {
+            transform: scale(1.05);
+        }
+
+        .photo-caption {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #6d5c54;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        /* PAGE DECORATIONS */
+        .page-decoration {
+            position: absolute;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .sticker {
+            position: absolute;
+            opacity: 0.8;
+            z-index: 1;
+            font-size: 1.5rem;
+            animation: wiggle 6s ease-in-out infinite;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        /* NAVIGATION */
+        .book-controls {
+            position: absolute;
+            bottom: -70px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .page-btn {
+            background: #a38f78;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            background: #8a7864;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        .page-btn:disabled {
+            background: #c7b9a8;
+            cursor: not-allowed;
+        }
+
+        /* MUSIC CONTROL */
+        .music-control {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #a38f78;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .music-control:hover {
+            transform: scale(1.1);
+            background: #8a7864;
+        }
+
+        .music-icon {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .book-cover, .book {
+                height: 550px;
+            }
+            
+            .photo-collage {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .photo-frame.large {
+                grid-column: span 2;
+                grid-row: span 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .book-cover, .book {
+                height: 500px;
+            }
+            
+            .book-cover h1 {
+                font-size: 2.2rem;
+            }
+            
+            .page {
+                padding: 1.5rem;
+            }
+            
+            .photo-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .photo-collage {
+                grid-template-columns: 1fr;
+            }
+            
+            .photo-frame.large, 
+            .photo-frame.portrait, 
+            .photo-frame.landscape {
+                grid-column: span 1;
+                grid-row: span 1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .book-cover, .book {
+                height: 450px;
+            }
+            
+            .book-cover h1 {
+                font-size: 1.8rem;
+            }
+            
+            .book-cover p {
+                font-size: 1.1rem;
+            }
+            
+            .open-btn, .page-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .page-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Partikel Dekorasi -->
+    <div class="particle" style="top:10%; left:5%; font-size:2rem;">✿</div>
+    <div class="particle" style="top:80%; left:90%; font-size:1.5rem;">✦</div>
+    <div class="particle" style="top:30%; left:85%; font-size:1.8rem;">❀</div>
+    <div class="particle" style="top:70%; left:10%; font-size:2.2rem;">✧</div>
+
+    <!-- Music Control -->
+    <div class="music-control" id="musicControl">
+        <i class="fas fa-music music-icon"></i>
+        <audio id="backgroundMusic" loop>
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+            Browser tidak mendukung audio.
+        </audio>
+    </div>
+
+    <!-- Book Container -->
+    <div class="book-container">
+        <!-- Book Cover -->
+        <div class="book-cover" id="bookCover">
+            <h1>Kenangan Indah Kita</h1>
+            <p>Kumpulan momen berharga yang tak terlupakan</p>
+            <button class="open-btn" id="openBook">Buka Album</button>
+            
+            <!-- Dekorasi sampul -->
+            <div class="sticker" style="top:20%; left:15%; transform:rotate(-15deg);">🌸</div>
+            <div class="sticker" style="bottom:25%; right:20%; transform:rotate(10deg);">✨</div>
+        </div>
+
+        <!-- Book Pages -->
+        <div class="book" id="book">
+            <!-- Page 1 - Liburan -->
+            <div class="page front" id="page1-front">
+                <div class="page-content">
+                    <h2 class="page-title">Liburan Bahagia</h2>
+                    
+                    <div class="photo-grid">
+                        <div class="photo-frame large">
+                            <img src="https://source.unsplash.com/random/800x600/?beach,vacation" alt="Liburan pantai" class="album-photo">
+                        </div>
+                        <div class="photo-frame">
+                            <img src="https://source.unsplash.com/random/600x600/?sunset" alt="Senja indah" class="album-photo">
+                        </div>
+                        <div class="photo-frame">
+                            <img src="https://source.unsplash.com/random/600x600/?couple,travel" alt="Bersama di perjalanan" class="album-photo">
+                        </div>
+                    </div>
+                    
+                    <p class="photo-caption">Momen indah saat kita berlibur ke pantai tahun lalu</p>
+                    
+                    <!-- Dekorasi halaman -->
+                    <div class="page-decoration" style="bottom:10%; right:5%; font-size:3rem; transform:rotate(15deg);">✧</div>
+                </div>
+            </div>
+            <div class="page back" id="page1-back">
+                <div class="page-content">
+                    <h2 class="page-title">Petualangan Kita</h2>
+                    
+                    <div class="photo-collage">
+                        <div class="photo-frame portrait">
+                            <img src="https://azelgabutt.github.io/1.jpg/random/600x900/?mountain" alt="Gunung" class="album-photo">
+                        </div>
+                        <div class="photo-frame">
+                            <img src="https://azelgabutt.github.io/2.jpg/random/600x600/?hiking" alt="Hiking" class="album-photo">
+                        </div>
+                        <div class="photo-frame">
+                            <img src="https://azelgabutt.github.io/3.jpg/random/600x600/?camping" alt="Kemah" class="album-photo">
+                        </div>
+                        <div class="photo-frame landscape">
+                            <img src="https://azelgabutt.github.io/4.jpg/random/1200x600/?adventure" alt="Petualangan" class="album-photo">
+                        </div>
+                    </div>
+                    
+                    <p class="photo-caption">Berbagai petualangan seru yang kita lalui bersama</p>
+                    
+                    <!-- Dekorasi halaman -->
+                    <div class="sticker" style="top:15%; right:10%; transform:rotate(-5deg);">🌿</div>
+                </div>
+            </div>
+
+            <!-- Page 2 - Momen Spesial -->
+            <div class="page front" id="page2-front">
+                <div class="page-content">
+                    <h2 class="page-title">Hari Spesial</h2>
+                    
+                    <div class="photo-grid">
+                        <div class="photo-frame">
+                            <img src="https://azelgabutt.github.io/1.jpg/random/600x600/?anniversary" alt="Ulang tahun" class="album-photo">
+                        </div>
+                        <div class="photo-frame large">
+                            <img src="https://azelgabutt.github.io/2.jpg/random/800x600/?celebration" alt="Perayaan" class="album-photo">
+                        </div>
+                        <div class="photo-frame">
+                            <img src="https://azelgabutt.github.io/3.jpg/random/600x600/?dinner,romantic" alt="Makan malam" class="album-photo">
+                        </div>
+                    </div>
+                    
+                    <p class="photo-caption">Perayaan-perayaan istimewa dalam perjalanan kita</p>
+                    
+                    <!-- Dekorasi halaman -->
+                    <div class="page-decoration" style="top:20%; left:5%; font-size:2.5rem; transform:rotate(-10deg);">❁</div>
+                </div>
+            </div>
+            <div class="page back" id="page2-back">
+                <div class="page-content">
+                    <h2 class="page-title">Keseharian Manis</h2>
+                    
+                    <div class="photo-collage">
+                        <div class="photo-frame landscape">
+                            <img src="https://azelgabutt.github.io/1.jpg/random/1200x600/?home,couple" alt="Di rumah" class="album-photo">
+                        </div>
+                        <div class="photo-frame">
+                            <img src="https://azelgabutt.github.io/2.jpg/random/600x600/?coffee" alt="Minum kopi" class="album-photo">
+                        </div>
+                        <div class="photo-frame">
+                            <img src="https://azelgabutt.github.io/3.jpg/random/600x600/?movie" alt="Nonton film" class="album-photo">
+                        </div>
+                        <div class="photo-frame portrait">
+                            <img src="https://azelgabutt.github.io/4.jpg/random/600x900/?cooking" alt="Memasak" class="album-photo">
+                        </div>
+                    </div>
+                    
+                    <p class="photo-caption">Momen-momen sederhana yang justru paling berkesan</p>
+                    
+                    <!-- Dekorasi halaman -->
+                    <div class="sticker" style="bottom:20%; left:10%; transform:rotate(8deg);">☕</div>
+                </div>
+            </div>
+
+            <!-- Page 3 - Kenangan Lain -->
+            <div class="page front" id="page3-front">
+                <div class="page-content">
+                    <h2 class="page-title">Kenangan dengan Teman</h2>
+                    
+                    <div class="photo-grid">
+                        <div class="photo-frame">
+                            <img src="https://source.unsplash.com/random/600x600/?friends" alt="Bersama teman" class="album-photo">
+                        </div>
+                        <div class="photo-frame large">
+                            <img src="https://source.unsplash.com/random/800x600/?party" alt="Pesta" class="album-photo">
+                        </div>
+                        <div class="photo-frame">
+                            <img src="https://source.unsplash.com/random/600x600/?gathering" alt="Kumpul-kumpul" class="album-photo">
+                        </div>
+                    </div>
+                    
+                    <p class="photo-caption">Kebersamaan kita dengan orang-orang terdekat</p>
+                    
+                    <!-- Dekorasi halaman -->
+                    <div class="page-decoration" style="bottom:15%; right:10%; font-size:3rem; transform:rotate(20deg);">✽</div>
+                </div>
+            </div>
+            <div class="page back" id="page3-back">
+                <div class="page-content">
+                    <h2 class="page-title">Untuk Masa Depan</h2>
+                    
+                    <div class="photo-collage">
+                        <div class="photo-frame portrait">
+                            <img src="https://source.unsplash.com/random/600x900/?future" alt="Masa depan" class="album-photo">
+                        </div>
+                        <div class="photo-frame">
+                            <img src="https://source.unsplash.com/random/600x600/?dream" alt="Impian" class="album-photo">
+                        </div>
+                        <div class="photo-frame">
+                            <img src="https://source.unsplash.com/random/600x600/?hope" alt="Harapan" class="album-photo">
+                        </div>
+                        <div class="photo-frame landscape">
+                            <img src="https://source.unsplash.com/random/1200x600/?together" alt="Bersama" class="album-photo">
+                        </div>
+                    </div>
+                    
+                    <p class="photo-caption">Impian dan harapan kita untuk hari esok</p>
+                    
+                    <!-- Dekorasi halaman -->
+                    <div class="sticker" style="top:25%; right:15%; transform:rotate(-12deg);">🌟</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="book-controls">
+            <button class="page-btn" id="prevPage"><i class="fas fa-arrow-left"></i> Sebelumnya</button>
+            <button class="page-btn" id="nextPage">Selanjutnya <i class="fas fa-arrow-right"></i></button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize variables
+            let currentPage = 0;
+            const pages = [
+                { front: 'page1-front', back: 'page1-back' },
+                { front: 'page2-front', back: 'page2-back' },
+                { front: 'page3-front', back: 'page3-back' }
+            ];
+            const totalPages = pages.length;
+            
+            // DOM elements
+            const bookCover = document.getElementById('bookCover');
+            const book = document.getElementById('book');
+            const openBookBtn = document.getElementById('openBook');
+            const prevPageBtn = document.getElementById('prevPage');
+            const nextPageBtn = document.getElementById('nextPage');
+            const musicControl = document.getElementById('musicControl');
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            
+            // Music state
+            let isMusicPlaying = false;
+            
+            // Open book
+            openBookBtn.addEventListener('click', function() {
+                bookCover.style.transform = 'rotateY(-180deg)';
+                setTimeout(() => {
+                    bookCover.style.display = 'none';
+                    book.style.display = 'block';
+                }, 800);
+            });
+            
+            // Page navigation
+            nextPageBtn.addEventListener('click', function() {
+                if (currentPage < totalPages - 1) {
+                    flipPage(currentPage, 'next');
+                    currentPage++;
+                    updateButtons();
+                }
+            });
+            
+            prevPageBtn.addEventListener('click', function() {
+                if (currentPage > 0) {
+                    currentPage--;
+                    flipPage(currentPage, 'prev');
+                    updateButtons();
+                }
+            });
+            
+            // Flip page function
+            function flipPage(pageIndex, direction) {
+                const page = pages[pageIndex];
+                const frontPage = document.getElementById(page.front);
+                const backPage = document.getElementById(page.back);
+                
+                if (direction === 'next') {
+                    frontPage.classList.add('flipped');
+                    backPage.classList.add('flipped');
+                } else {
+                    frontPage.classList.remove('flipped');
+                    backPage.classList.remove('flipped');
+                }
+            }
+            
+            // Update navigation buttons
+            function updateButtons() {
+                prevPageBtn.disabled = currentPage === 0;
+                nextPageBtn.disabled = currentPage === totalPages - 1;
+            }
+            
+            // Music control
+            musicControl.addEventListener('click', function() {
+                if (isMusicPlaying) {
+                    backgroundMusic.pause();
+                    musicControl.innerHTML = '<i class="fas fa-music music-icon"></i>';
+                } else {
+                    backgroundMusic.play();
+                    musicControl.innerHTML = '<i class="fas fa-pause music-icon"></i>';
+                }
+                isMusicPlaying = !isMusicPlaying;
+            });
+            
+            // Initialize buttons
+            updateButtons();
+            
+            // Function to change photos
+            window.changePhoto = function(photoElement, newUrl) {
+                const photos = document.querySelectorAll(photoElement);
+                photos.forEach(photo => {
+                    photo.src = newUrl;
+                });
+            };
+            
+            // Add more random decorations
+            function addDecorations() {
+                const decorations = ['✿', '✦', '❀', '✧', '❁', '✽', '🌸', '✨', '🌿', '☕', '🌟'];
+                const pageContents = document.querySelectorAll('.page-content');
+                
+                pageContents.forEach(content => {
+                    // Add 2-3 decorations per page
+                    for (let i = 0; i < 2 + Math.floor(Math.random() * 2); i++) {
+                        const decor = document.createElement('div');
+                        decor.className = Math.random() > 0.5 ? 'page-decoration' : 'sticker';
+                        decor.innerHTML = decorations[Math.floor(Math.random() * decorations.length)];
+                        
+                        // Random position
+                        const top = 5 + Math.random() * 80;
+                        const left = 5 + Math.random() * 80;
+                        const size = 1 + Math.random() * 3;
+                        const rotation = -15 + Math.random() * 30;
+                        
+                        decor.style.top = `${top}%`;
+                        decor.style.left = `${left}%`;
+                        decor.style.fontSize = `${size}rem`;
+                        decor.style.transform = `rotate(${rotation}deg)`;
+                        
+                        if (decor.className === 'sticker') {
+                            decor.style.opacity = '0.7';
+                            decor.style.animationDelay = `${Math.random() * 5}s`;
+                        }
+                        
+                        content.appendChild(decor);
+                    }
+                });
+            }
+            
+            // Call decoration function
+            addDecorations();
+        });
+    </script>
+</body>
+  </html>
