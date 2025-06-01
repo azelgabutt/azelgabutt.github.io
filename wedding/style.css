@@ -481,7 +481,7 @@ footer li {
   }
 
   .timeline li .timeline-panel {
-    width: 50%;
+    width: 100%;
     transform: translateX(-20px);
   }
 
