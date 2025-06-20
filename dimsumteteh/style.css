@@ -175,7 +175,7 @@ body {
   min-height: 100vh;
   display: flex;
   align-items: center;
-  background-image: url('../img/header-bg.jpeg');
+  background-image: url('../img/header-dm.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -198,7 +198,7 @@ body {
   position: absolute;
   /* background: salmon; */
   inset: 0;
-  -webkit-mask-image: url('../img/header-bg.svg');
+  -webkit-mask-image: url('../img/header-dm.jpg');
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-size: cover;
   -webkit-mask-position: center;
@@ -278,7 +278,7 @@ body {
 
 .about .row .about-img img {
   width: 100%;
-  -webkit-mask-image: url('../img/menu/splash.svg');
+  -webkit-mask-image: url('../img/menu/dm.jpg');
   -webkit-mask-size: 50%;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
