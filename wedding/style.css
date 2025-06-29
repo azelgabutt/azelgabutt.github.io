@@ -467,21 +467,21 @@ footer li {
 /* mobile phone */
 @media (max-width: 576px) {
   html {
-    font-size: 50%;
+    font-size: 60%;
   }
 
   .simply-countdown > .simply-section {
-    padding: 40px;
+    padding: 45px;
     margin: 3px;
   }
 
   .timeline li .timeline-image {
-    width: 65px;
-    height: 65px;
+    width: 80px;
+    height: 80px;
   }
 
   .timeline li .timeline-panel {
-    width: 100%;
+    width: 65%;
     transform: translateX(-20px);
   }
 
